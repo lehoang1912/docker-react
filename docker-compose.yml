@@ -1,0 +1,23 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - .:/app
+
+  #Downside is we cant manipulate test suites by enter q, w, ... in command promt
+  #Need to run docker exec -it CONTAINER_ID bash to run test
+  #Docker attach only access to primary process. It does not solve problem here
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
